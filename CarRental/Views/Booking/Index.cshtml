@@ -1,0 +1,190 @@
+﻿@model IEnumerable<CarRental_Model.Domain.Booking>
+
+@{
+    ViewData["Title"] = "My Bookings";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!-- Hero -->
+<section class="py-5 bg-dark text-white text-center booking-hero" style="background-image:url('https://themes-themegoods.b-cdn.net/grandcarrental/demo/wp-content/uploads/2017/01/IMG_3496bfree.jpg'); background-size:cover; background-position:center;">
+    <div class="overlay" style="background:rgba(0,0,0,0.45);min-height:220px;display:flex;align-items:center;justify-content:center;">
+        <div>
+            <h1 class="display-5 fw-bold">Your Bookings</h1>
+            <p class="lead">Manage your bookings and orders</p>
+        </div>
+    </div>
+</section>
+
+<section class="py-5 bg-dark text-white text-center">
+    <div class="container">
+        <h2 class="fw-bold mb-5">Best Car Rental Services</h2>
+        <div class="row">
+            <div class="col-md-4 mb-4">
+                <i class="fas fa-car fa-3x text-warning mb-3"></i>
+                <h5 class="fw-bold">Wide Range of Vehicles</h5>
+                <p>Choose from economy, SUV, or luxury cars – all maintained to perfection.</p>
+            </div>
+            <div class="col-md-4 mb-4">
+                <i class="fas fa-plane-arrival fa-3x text-warning mb-3"></i>
+                <h5 class="fw-bold">Airport Transfers</h5>
+                <p>Reliable airport pickup and drop service with professional drivers.</p>
+            </div>
+            <div class="col-md-4 mb-4">
+                <i class="fas fa-user-tie fa-3x text-warning mb-3"></i>
+                <h5 class="fw-bold">Luxury Chauffeur</h5>
+                <p>Travel in style with our premium chauffeur-driven car rentals.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="container my-5">
+    @if (TempData["Message"] != null)
+    {
+        <div id="temp-message" data-msg="@TempData["Message"]"></div>
+    }
+    @if (TempData["Error"] != null)
+    {
+        <div id="temp-error" data-msg="@TempData["Error"]"></div>
+    }
+
+    @if (Model == null || !Model.Any())
+    {
+        <div class="alert alert-info">You have no bookings yet.</div>
+    }
+    else
+    {
+        <!-- Cart Table -->
+        <div class="card shadow-sm mb-4">
+            <div class="card-body p-0">
+                <table class="table table-borderless mb-0 align-middle booking-cart-table">
+                    <thead class="thead-dark" style="background:#000;color:#fff;">
+                        <tr>
+                            <th style="width:5%"></th>
+                            <th style="width:15%">Product</th>
+                            <th style="width:40%">Details</th>
+                            <th style="width:15%">Price</th>
+                            <th style="width:10%">Qty</th>
+                            <th style="width:15%">Subtotal</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (CarRental_Model.Domain.Booking booking in Model)
+                        {
+                            string rupee = "₹";
+                            <tr class="align-middle border-top">
+                                <td class="text-center">
+                                    @if (!booking.Status.Contains("Order Placed"))
+                                    {
+                                        <form asp-action="RemoveBooking" method="post" onsubmit="return confirm('Remove this booking?');">
+                                            <input type="hidden" name="bookingId" value="@booking.Id" />
+                                            <button class="btn btn-link text-danger p-0" title="Remove"><i class="fas fa-times"></i></button>
+                                        </form>
+                                    }
+                                    else
+                                    {
+                                        <form asp-action="CancelOrder" method="post" onsubmit="return confirm('Cancel this order?');">
+                                            <input type="hidden" name="bookingId" value="@booking.Id" />
+                                            <button class="btn btn-link text-danger p-0" title="Cancel Order"><i class="fas fa-times-circle"></i></button>
+                                        </form>
+                                    }
+                                </td>
+
+                                <td>
+                                    <img src="@booking.Vehicle.ImageUrl" alt="@booking.Vehicle.VehicleName" style="width:100px;height:70px;object-fit:cover;border-radius:6px;" />
+                                </td>
+
+                                <td>
+                                    <h5 class="mb-1">@booking.Vehicle.VehicleName</h5>
+                                    <small class="text-muted">@booking.Vehicle.Brand?.BrandName — @booking.Vehicle.VehicleType?.TypeName</small>
+                                    <div class="mt-2">
+                                        <span class="badge bg-@(booking.Status.Contains("Confirmed") ? "success" : booking.Status.Contains("Cancelled") ? "danger" : "warning")">
+                                            @booking.Status
+                                        </span>
+                                        <small class="ms-2 text-muted"> @booking.StartDate.ToString("dd MMM yyyy") — @booking.EndDate.ToString("dd MMM yyyy")</small>
+                                    </div>
+                                </td>
+
+                                <td class="fw-bold">@rupee @booking.Vehicle.RentPerDay.ToString("N2")</td>
+                                <td>
+                                    <input type="number" class="form-control form-control-sm" value="1" min="1" disabled />
+                                </td>
+                                <td class="fw-bold">@rupee @booking.Vehicle.RentPerDay.ToString("N2")</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Cart totals (full width like cart table) -->
+        <div class="card shadow-sm mb-4">
+            <div class="card-body">
+                <h5 class="mb-3">Cart totals</h5>
+                <table class="table table-borderless mb-0">
+                    <tbody>
+                        @{
+                            decimal total = 0M;
+                            foreach (CarRental_Model.Domain.Booking b in Model)
+                            {
+                                total += b.Vehicle.RentPerDay;
+                            }
+                        }
+                        <tr>
+                            <th>Subtotal</th>
+                            <td class="text-end"><strong>₹ @total.ToString("N2")</strong></td>
+                        </tr>
+                        <tr class="border-top">
+                            <th>Total</th>
+                            <td class="text-end"><strong>₹ @total.ToString("N2")</strong></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Per-booking order/payment -->
+        @foreach (CarRental_Model.Domain.Booking booking in Model)
+        {
+            if (booking.Status.Contains("Order Placed"))
+            {
+                <div class="card shadow-sm mb-3">
+                    <div class="card-body d-flex justify-content-between align-items-center">
+                        <div>
+                            <small class="text-muted">Order #@booking.Id — <span class="fw-bold">@booking.Status</span></small>
+                        </div>
+                        <div>
+                            <a asp-action="GenerateInvoice" asp-route-bookingId="@booking.Id" class="btn btn-sm btn-outline-primary">Invoice</a>
+                            <form asp-action="CancelOrder" method="post" class="d-inline ms-2" onsubmit="return confirm('Cancel order?');">
+                                <input type="hidden" name="bookingId" value="@booking.Id" />
+                                <button class="btn btn-sm btn-danger">Cancel Order</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <form asp-action="PlaceOrder" method="post" class="card shadow-sm mb-3 p-3">
+                    <input type="hidden" name="bookingId" value="@booking.Id" />
+                    <div class="d-flex justify-content-between align-items-center gap-2">
+                        <div>
+                            <span class="fw-bold">@booking.Vehicle.VehicleName</span>
+                        </div>
+                        <div class="d-flex gap-2 align-items-center">
+                            <select name="paymentMethod" class="form-select form-select-sm" required style="max-width:220px;">
+                                <option value="Bank Transfer">Bank Transfer</option>
+                                <option value="Cash on Delivery">Cash on Delivery</option>
+                            </select>
+                            <button type="submit" class="btn btn-success btn-sm">Place Order</button>
+                        </div>
+                    </div>
+                </form>
+            }
+        }
+    }
+</div>
+
+@section Scripts {
+    <script src="~/js/_Notification.js"></script>
+}

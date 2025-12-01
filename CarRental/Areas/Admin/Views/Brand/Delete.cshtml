@@ -1,0 +1,18 @@
+﻿@model CarRental_Model.Domain.Brand
+@{
+    ViewData["Title"] = "Delete Brand";
+}
+
+<h2>Delete Brand</h2>
+
+<div class="alert alert-warning">
+    Are you sure you want to delete <strong>@Model.BrandName</strong>?
+</div>
+
+<form asp-area="Admin" asp-controller="Brand" asp-action="Delete" method="post">
+    @Html.AntiForgeryToken()
+    <input type="hidden" asp-for="Id" />
+
+    <button type="submit" class="btn btn-danger">Yes, Delete</button>
+    <a asp-area="Admin" asp-controller="Brand" asp-action="Index" class="btn btn-secondary">Cancel</a>
+</form>

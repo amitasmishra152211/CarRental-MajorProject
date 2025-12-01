@@ -1,0 +1,31 @@
+﻿@model CarRental_Model.Domain.VehicleType
+@{
+    ViewData["Title"] = "Add Vehicle Type";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Add Vehicle Type</h2>
+
+<form asp-area="Admin" asp-controller="VehicleType" asp-action="Create" method="post">
+    @Html.AntiForgeryToken()
+
+    <div class="mb-3">
+        <label asp-for="TypeName" class="form-label"></label>
+        <input asp-for="TypeName" class="form-control" />
+        <span asp-validation-for="TypeName" class="text-danger"></span>
+    </div>
+
+    <!-- New Vehicle Type Image URL Input -->
+    <div class="mb-3">
+        <label asp-for="VehicleTypeImg" class="form-label">Vehicle Type Image URL</label>
+        <input asp-for="VehicleTypeImg" class="form-control" placeholder="https://example.com/vehicletype.jpg" />
+        <span asp-validation-for="VehicleTypeImg" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-success">Save</button>
+    <a asp-action="Index" class="btn btn-secondary">Back</a>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

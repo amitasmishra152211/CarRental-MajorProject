@@ -1,0 +1,20 @@
+﻿@model CarRental_Model.Domain.Vehicle
+@{
+    var brand = ViewBag.Brand as CarRental_Model.Domain.Brand;
+}
+
+<h2>Delete Vehicle: @Model.VehicleName</h2>
+
+@if (!string.IsNullOrEmpty(Model.ImageUrl))
+{
+    <img src="@Model.ImageUrl" alt="@Model.VehicleName" width="200" class="mb-3" />
+}
+
+<p>Are you sure you want to delete this vehicle?</p>
+
+<form asp-area="Admin" asp-controller="Vehicle" asp-action="Delete" method="post">
+    @Html.AntiForgeryToken()
+    <input type="hidden" asp-for="Id" />
+    <button type="submit" class="btn btn-danger">Delete</button>
+    <a asp-area="Admin" asp-controller="Vehicle" asp-action="Index" asp-route-brandId="@brand?.Id" class="btn btn-secondary">Cancel</a>
+</form>

@@ -1,0 +1,32 @@
+﻿@model IEnumerable<CarRental_Model.Domain.Brand>
+@{
+    ViewData["Title"] = "Brands";
+}
+
+<h2>Brands</h2>
+<a asp-area="Admin" asp-controller="Brand" asp-action="Create" class="btn btn-success mb-3">+ Add Brand</a>
+
+<table id="brandTable" class="table table-bordered table-striped datatable">
+    <thead class="table-dark">
+        <tr>
+            <th>Name</th>
+            <th>Description</th>
+            <th style="width:250px;">Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var brand in Model)
+        {
+            <tr>
+                <td>@brand.BrandName</td>
+                <td style="max-width:300px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;" title="@brand.Description">
+                    @brand.Description
+                </td>
+                <td>
+                    <a asp-area="Admin" asp-controller="Brand" asp-action="Edit" asp-route-id="@brand.Id" class="btn btn-primary btn-sm">Edit</a>
+                    <a asp-area="Admin" asp-controller="Brand" asp-action="Delete" asp-route-id="@brand.Id" class="btn btn-danger btn-sm">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

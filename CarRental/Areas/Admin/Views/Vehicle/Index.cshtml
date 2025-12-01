@@ -1,0 +1,37 @@
+﻿@model IEnumerable<CarRental_Model.Domain.Vehicle>
+@{
+    ViewData["Title"] = "Vehicles";
+    var brandName = ViewBag.BrandName as string ?? "All Vehicles";
+}
+
+<h2>@brandName</h2>
+<a asp-area="Admin" asp-controller="Vehicle" asp-action="Create" asp-route-brandId="@ViewBag.BrandId" class="btn btn-success mb-3">+ Add Vehicle</a>
+
+<table id="vehicleTable" class="table table-bordered table-striped datatable">
+    <thead class="table-dark">
+        <tr>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Passengers</th>
+            <th>Luggage</th>
+            <th>Rent Per Day</th>
+            <th style="width:250px;">Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var vehicle in Model)
+        {
+            <tr>
+                <td>@vehicle.VehicleName</td>
+                <td>@vehicle.VehicleType?.TypeName</td>
+                <td>@vehicle.Passenger</td>
+                <td>@vehicle.Luggage</td>
+                <td>₹@vehicle.RentPerDay</td>
+                <td>
+                    <a asp-area="Admin" asp-controller="Vehicle" asp-action="Edit" asp-route-id="@vehicle.Id" class="btn btn-primary btn-sm">Edit</a>
+                    <a asp-area="Admin" asp-controller="Vehicle" asp-action="Delete" asp-route-id="@vehicle.Id" class="btn btn-danger btn-sm">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

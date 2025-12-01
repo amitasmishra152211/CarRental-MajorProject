@@ -1,0 +1,128 @@
+﻿@model CarRental_Model.Domain.Vehicle
+
+<!-- TempData Messages -->
+@if (TempData["Message"] != null)
+{
+    <div class="alert alert-success mt-3">@TempData["Message"]</div>
+}
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger mt-3">@TempData["Error"]</div>
+}
+
+<!-- Hero Section -->
+<section class="vehicle-hero position-relative text-white w-100"
+         style="height:400px; background-image: url('@Model.ImageUrl'); background-size: cover; background-position: center;">
+    <div class="overlay_background position-absolute w-100 h-100" style="background: rgba(0,0,0,0.4); top:0; left:0;"></div>
+    <div class="d-flex flex-column justify-content-end position-relative h-100"
+         style="align-items: flex-start; text-align: left; padding-right: 50px;">
+        <h1 class="display-4 fw-bold m-3">@Model.VehicleName</h1>
+        <p class="lead m-3">₹@Model.RentPerDay / Day</p>
+    </div>
+</section>
+
+<!-- Vehicle Info Icons -->
+<div class="container mt-5">
+    <div class="row text-center border-bottom pb-4 mb-4">
+        <div class="col-md-3">
+            <i class="fas fa-user fa-2x mb-2"></i>
+            <p>@Model.Passenger Passengers</p>
+        </div>
+        <div class="col-md-3">
+            <i class="fas fa-suitcase fa-2x mb-2"></i>
+            <p>@Model.Luggage Luggages</p>
+        </div>
+        <div class="col-md-3">
+            <i class="fas fa-cogs fa-2x mb-2"></i>
+            <p>@Model.EngineType</p>
+        </div>
+        <div class="col-md-3">
+            <i class="fas fa-car-side fa-2x mb-2"></i>
+            <p>@Model.Doors Doors</p>
+        </div>
+    </div>
+
+    <!-- Vehicle Extra Details -->
+    <div class="container mb-4">
+        <h5>Included</h5>
+        <p>@Model.Included</p>
+
+        <h5 class="mt-3">Not Included</h5>
+        <p>@Model.NotIncluded</p>
+
+        <h5 class="mt-3">Refueling</h5>
+        <p>@Model.Refueling</p>
+
+        <h5 class="mt-3">Car Wash</h5>
+        <p>@Model.CarWash</p>
+
+        <h5 class="mt-3">No Smoking</h5>
+        <p>@Model.NoSmoking</p>
+    </div>
+
+    <!-- Booking Form or Availability Warning -->
+    @if (Model.AvailableQuantity <= 0)
+    {
+        <div class="alert alert-warning text-center">
+            This vehicle is currently not available for booking.
+        </div>
+    }
+    else
+    {
+        <form asp-controller="Booking" asp-action="AddBooking" method="post">
+            <input type="hidden" name="vehicleId" value="@Model.Id" />
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label for="FullName" class="form-label">Full Name</label>
+                    <input type="text" class="form-control" name="FullName" id="FullName" required />
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="MobileNumber" class="form-label">Mobile Number</label>
+                    <input type="text" class="form-control" name="MobileNumber" id="MobileNumber" required />
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label for="Email" class="form-label">Email</label>
+                    <input type="email" class="form-control" name="Email" id="Email" required />
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="Locality" class="form-label">Locality</label>
+                    <input type="text" class="form-control" name="Locality" id="Locality" required />
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label for="Area" class="form-label">Area</label>
+                    <input type="text" class="form-control" name="Area" id="Area" required />
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="LandMark" class="form-label">LandMark</label>
+                    <input type="text" class="form-control" name="LandMark" id="LandMark" />
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-4 mb-3">
+                    <label for="City" class="form-label">City</label>
+                    <input type="text" class="form-control" name="City" id="City" required />
+                </div>
+                <div class="col-md-4 mb-3">
+                    <label for="Pincode" class="form-label">Pincode</label>
+                    <input type="text" class="form-control" name="Pincode" id="Pincode" required />
+                </div>
+                <div class="col-md-4 mb-3">
+                    <label for="State" class="form-label">State</label>
+                    <input type="text" class="form-control" name="State" id="State" required />
+                </div>
+            </div>
+
+            <div class="text-center mb-5" >
+                <button type="submit" class="btn btn-success btn-lg mt-3">Add Booking</button>
+            </div>
+        </form>
+    }
+</div>

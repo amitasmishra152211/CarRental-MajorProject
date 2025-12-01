@@ -1,0 +1,66 @@
+﻿@model CarRental_Model.Domain.Booking
+
+@{
+    ViewData["Title"] = "Invoice";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    string rupee = "₹";
+}
+
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <div>
+                        <h3 class="mb-0">Invoice</h3>
+                        <small class="text-muted">Booking #@Model.Id</small>
+                    </div>
+                    <div class="text-end">
+                        <h5 class="mb-0">CarRental</h5>
+                        <small class="text-muted">amitsws01@gmail.com</small>
+                    </div>
+                </div>
+
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <h6>Bill To</h6>
+                        <p class="mb-0">@Model.FullName</p>
+                        <p class="mb-0">@Model.Email</p>
+                        <p class="mb-0">@Model.Locality, @Model.Area</p>
+                        <p class="mb-0">@Model.City - @Model.Pincode</p>
+                    </div>
+                    <div class="col-md-6 text-end">
+                        <p><strong>Booking Date:</strong> @Model.StartDate.ToString("dd MMM yyyy")</p>
+                        <p><strong>Due:</strong> @Model.EndDate.ToString("dd MMM yyyy")</p>
+                    </div>
+                </div>
+
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Product</th>
+                            <th class="text-end">Price</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>@Model.Vehicle?.VehicleName</td>
+                            <td class="text-end">@rupee @Model.Vehicle.RentPerDay.ToString("N2")</td>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <th>Total</th>
+                            <th class="text-end">@rupee @Model.Vehicle.RentPerDay.ToString("N2")</th>
+                        </tr>
+                    </tfoot>
+                </table>
+
+                <div class="mt-4">
+                    <p class="mb-0"><strong>Payment Method:</strong> @Model.Status.Contains("Order Placed") ? @Model.Status</p>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</section>

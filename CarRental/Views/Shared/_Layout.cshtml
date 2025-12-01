@@ -1,0 +1,180 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - CarRental</title>
+
+    <!-- Font Awesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
+    <!-- toaster -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" />
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <!-- Swiper CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css" />
+    <!-- Site CSS -->
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-dark fixed-top shadow-sm bg-dark" id="mainNav">
+            <div class="container">
+                <a class="navbar-brand fw-bold" asp-area="" asp-controller="Home" asp-action="Index">CarRental</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav me-auto">
+                        <li class="nav-item"><a class="nav-link active" asp-controller="Home" asp-action="Index">Home</a></li>
+                        <li class="nav-item"><a class="nav-link" asp-controller="Home" asp-action="AboutUs">About Us</a></li>
+                        <li class="nav-item"><a class="nav-link" asp-controller="Home" asp-action="Services">Services</a></li>
+
+                        <!-- Cars by Brand -->
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="carsDropdown" role="button" data-bs-toggle="dropdown">
+                                Cars by Brand
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="carsDropdown">
+                                @inject CarRental_DataAccess.Repository.IRepoSer.IUnitOfWork _unitOfWork
+                                @{
+                                    var brands = _unitOfWork.Brands.GetAll();
+                                }
+                                @foreach (var brand in brands)
+                                {
+                                    <li>
+                                        <a class="dropdown-item" asp-controller="CarBrand" asp-action="Details" asp-route-id="@brand.Id">
+                                            @brand.BrandName
+                                        </a>
+                                    </li>
+                                }
+                            </ul>
+                        </li>
+
+                        <!-- Cars by Type -->
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="vehicleTypeDropdown" role="button" data-bs-toggle="dropdown">
+                                Car Type
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="vehicleTypeDropdown">
+                                @{
+                                    var vehicleTypes = _unitOfWork.VehicleType.GetAll();
+                                }
+                                @foreach (var type in vehicleTypes)
+                                {
+                                    <li>
+                                        <a class="dropdown-item" asp-controller="CarType" asp-action="Details" asp-route-id="@type.Id">
+                                            @type.TypeName
+                                        </a>
+                                    </li>
+                                }
+                            </ul>
+                        </li>
+
+                        <li class="nav-item">
+                                   <a class="nav-link" asp-controller="Booking" asp-action="Index">My Bookings</a>
+                        </li>
+
+                    </ul>
+
+                    <!-- Search Bar -->
+                    <form asp-controller="Home" asp-action="SearchResults" method="get" class="d-flex ms-auto">
+                        <input class="form-control me-2" type="search" name="query" placeholder="Search cars..." aria-label="Search">
+                        <button class="btn btn-outline-warning" type="submit">Search</button>
+                    </form>
+
+                    <ul class="navbar-nav ms-3">
+
+                        <li class="nav-item dropdown">
+                            @if (User.Identity != null && User.Identity.IsAuthenticated)
+                            {
+                                <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown">
+                                    <i class="fas fa-user"></i> Hello! @User.Identity.Name
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                                    <li>
+                                        <a class="dropdown-item" asp-controller="Account" asp-action="Logout">Logout</a>
+                                    </li>
+                                </ul>
+                            }
+                            else
+                            {
+                                <a class="btn btn-warning ms-3 text-dark fw-bold" asp-controller="Account" asp-action="Login">Login</a>
+                            }
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main role="main" class="container-fluid main-content">
+        <partial name="_Notification">
+        @RenderBody()
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white pt-5">
+        <div class="container">
+            <div class="row">
+                <!-- About Us -->
+                <div class="col-md-4 mb-4">
+                    <h5 class="fw-bold">About Us</h5>
+                    <p>Getting dressed up and traveling with good friends makes for a shared, unforgettable experience.</p>
+                    <h4 class="fw-bold">CarRental</h4>
+                </div>
+
+                <!-- Contact Info -->
+                <div class="col-md-4 mb-4">
+                    <h5 class="fw-bold">Contact Info</h5>
+                    <p><i class="fas fa-phone"></i> +91-8104541156</p>
+                    <p><i class="fas fa-location-dot"></i> 184 Main Street East Perl Harbour 8007</p>
+                    <p><i class="fas fa-clock"></i> Mon - Sat 8.00 - 18.00 Sunday CLOSED</p>
+                    <div class="d-flex gap-2 mt-2">
+                        <a href="#" class="btn btn-primary btn-sm rounded-circle"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="btn btn-info btn-sm rounded-circle"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="btn btn-danger btn-sm rounded-circle"><i class="fab fa-youtube"></i></a>
+                        <a href="#" class="btn btn-danger btn-sm rounded-circle"><i class="fab fa-pinterest"></i></a>
+                        <a href="#" class="btn btn-primary btn-sm rounded-circle"><i class="fab fa-instagram"></i></a>
+                    </div>
+
+                </div>
+
+                <!-- Newsletter -->
+                <div class="col-md-4 mb-4">
+                    <h5 class="fw-bold">Newsletter</h5>
+                    <p>Don't miss a thing! Sign up to receive daily deals</p>
+                    <form class="d-flex flex-column gap-2">
+                        <input type="email" class="form-control" placeholder="Your Email Address" />
+                        <button type="submit" class="btn btn-info text-white">Subscribe</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Footer Bottom -->
+            <div class="row border-top pt-3 mt-3">
+                <div class="col-md-6">
+                    &copy; 2025 CarRental | Developed by AMIT MISHRA
+                </div>
+                <div class="col-md-6 text-end p-5">
+                    <a href="#" class="text-white text-decoration-none me-3">Home</a>
+                    <a href="/Home/AboutUs" class="text-white text-decoration-none me-3">About Us</a>
+                    <a href="/Home/Services" class="text-white text-decoration-none me-3">Services</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Swiper JS -->
+    <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
+    <script src="~/js/site.js"></script>
+    <script src="~/js/_Notification.js"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+    @await Html.PartialAsync("_Notification")
+</body>
+</html>

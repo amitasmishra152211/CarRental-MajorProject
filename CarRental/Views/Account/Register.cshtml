@@ -1,0 +1,65 @@
+﻿@{
+    ViewData["Title"] = "User Registration";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container py-5" style="min-height:80vh;">
+    <div class="card shadow-lg p-4 mx-auto" style="max-width:900px;">
+        <h3 class="text-center fw-bold text-success mb-4">User Registration</h3>
+
+        @if (ViewBag.Error != null)
+        {
+            <div class="alert alert-danger text-center">@ViewBag.Error</div>
+        }
+
+        <form asp-controller="Account" asp-action="Register" method="post">
+            <!-- First Row: Username | FirstName | MiddleName | LastName -->
+            <div class="row g-3 mb-3">
+                <div class="col-12 col-md-3">
+                    <label class="form-label fw-semibold">Username</label>
+                    <input type="text" name="username" class="form-control" required />
+                </div>
+                <div class="col-12 col-md-3">
+                    <label class="form-label fw-semibold">First Name</label>
+                    <input type="text" name="firstName" class="form-control" required />
+                </div>
+                <div class="col-12 col-md-3">
+                    <label class="form-label fw-semibold">Middle Name</label>
+                    <input type="text" name="middleName" class="form-control" />
+                </div>
+                <div class="col-12 col-md-3">
+                    <label class="form-label fw-semibold">Last Name</label>
+                    <input type="text" name="lastName" class="form-control" required />
+                </div>
+            </div>
+
+            <!-- Second Row: Email -->
+            <div class="row mb-3">
+                <div class="col-12">
+                    <label class="form-label fw-semibold">Email</label>
+                    <input type="email" name="email" class="form-control" required />
+                </div>
+            </div>
+
+            <!-- Third Row: Password | Confirm Password -->
+            <div class="row g-3 mb-4">
+                <div class="col-12 col-md-6">
+                    <label class="form-label fw-semibold">Password</label>
+                    <input type="password" name="password" class="form-control" required />
+                </div>
+                <div class="col-12 col-md-6">
+                    <label class="form-label fw-semibold">Confirm Password</label>
+                    <input type="password" name="confirmPassword" class="form-control" required />
+                </div>
+            </div>
+
+            <!-- Register Button -->
+            <button type="submit" class="btn btn-success btn-lg w-100 fw-bold">Register</button>
+
+            <div class="text-center mt-3">
+                <span>Already have an account?</span>
+                <a asp-controller="Account" asp-action="Login" class="fw-bold text-decoration-none">Login here</a>
+            </div>
+        </form>
+    </div>
+</div>

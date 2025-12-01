@@ -1,0 +1,51 @@
+﻿/* Hero section styling */
+/*.hero-section {
+    position: relative;
+    height: 100vh;
+    background: url('/images/hero-bg.jpg') center center/cover no-repeat;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+}
+
+.hero-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+}
+
+.hero-content {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+}
+
+    .hero-content h1 {
+        font-size: 3rem;
+        font-weight: bold;
+    }
+
+    .hero-content p {
+        font-size: 1.25rem;
+        margin-bottom: 1.5rem;
+    }*/
+
+/* Footer */
+/*footer {
+    background: #111;
+    color: #bbb;
+    padding: 2rem 0;
+}
+
+    footer a {
+        color: #fff;
+        text-decoration: none;
+    }
+
+        footer a:hover {
+            color: #f5c518;
+        }*/

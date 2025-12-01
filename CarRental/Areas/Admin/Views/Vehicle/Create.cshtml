@@ -1,0 +1,102 @@
+﻿@model CarRental_Model.Domain.Vehicle
+@{
+    ViewData["Title"] = "Create Vehicle";
+    var brand = ViewBag.Brand as CarRental_Model.Domain.Brand;
+}
+
+<h2>Create Vehicle for @brand?.BrandName</h2>
+
+<form asp-area="Admin" asp-controller="Vehicle" asp-action="Create" method="post">
+    @Html.AntiForgeryToken()
+
+    <!-- Hidden BrandId -->
+    <input asp-for="BrandId" type="hidden" value="@Model.BrandId" />
+
+    <div class="row">
+        <div class="col-md-6 mb-3">
+            <label asp-for="VehicleName" class="form-label"></label>
+            <input asp-for="VehicleName" class="form-control" />
+            <span asp-validation-for="VehicleName" class="text-danger"></span>
+        </div>
+        <div class="col-md-6 mb-3">
+            <label asp-for="VehicleTypeId" class="form-label">Vehicle Type</label>
+            <select asp-for="VehicleTypeId" class="form-select" asp-items="ViewBag.VehicleTypes">
+                <option value="">-- Select Vehicle Type --</option>
+            </select>
+            <span asp-validation-for="VehicleTypeId" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-4 mb-3">
+            <label asp-for="Passenger" class="form-label"></label>
+            <input asp-for="Passenger" type="number" class="form-control" />
+            <span asp-validation-for="Passenger" class="text-danger"></span>
+        </div>
+        <div class="col-md-4 mb-3">
+            <label asp-for="Luggage" class="form-label"></label>
+            <input asp-for="Luggage" type="number" class="form-control" />
+            <span asp-validation-for="Luggage" class="text-danger"></span>
+        </div>
+        <div class="col-md-4 mb-3">
+            <label asp-for="Doors" class="form-label"></label>
+            <input asp-for="Doors" type="number" class="form-control" />
+            <span asp-validation-for="Doors" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="EngineType" class="form-label"></label>
+        <input asp-for="EngineType" class="form-control" />
+        <span asp-validation-for="EngineType" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Refueling" class="form-label"></label>
+        <textarea asp-for="Refueling" class="form-control"></textarea>
+        <span asp-validation-for="Refueling" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="CarWash" class="form-label"></label>
+        <textarea asp-for="CarWash" class="form-control"></textarea>
+        <span asp-validation-for="CarWash" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="NoSmoking" class="form-label"></label>
+        <textarea asp-for="NoSmoking" class="form-control"></textarea>
+        <span asp-validation-for="NoSmoking" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Included" class="form-label"></label>
+        <textarea asp-for="Included" class="form-control"></textarea>
+        <span asp-validation-for="Included" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="NotIncluded" class="form-label"></label>
+        <textarea asp-for="NotIncluded" class="form-control"></textarea>
+        <span asp-validation-for="NotIncluded" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="RentPerDay" class="form-label"></label>
+        <input asp-for="RentPerDay" type="number" step="0.01" class="form-control" />
+        <span asp-validation-for="RentPerDay" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="ImageUrl" class="form-label"></label>
+        <input asp-for="ImageUrl" type="url" class="form-control" placeholder="https://example.com/image.jpg" />
+        <span asp-validation-for="ImageUrl" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-success">Save</button>
+    <a asp-action="Index" asp-route-brandId="@brand?.Id" class="btn btn-secondary">Back</a>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

@@ -1,0 +1,39 @@
+﻿@{
+    ViewData["Title"] = "User Login";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="d-flex justify-content-center align-items-center" style="min-height:80vh;">
+    <div class="card shadow-lg p-4 rounded-4" style="width:400px;">
+        <h3 class="text-center fw-bold text-primary mb-4">User Login</h3>
+
+        @if (ViewBag.Error != null)
+        {
+            <div class="alert alert-danger text-center">@ViewBag.Error</div>
+        }
+
+        @if (TempData["Message"] != null)
+        {
+            <div class="alert alert-success text-center">@TempData["Message"]</div>
+        }
+
+        <form asp-controller="Account" asp-action="Login" method="post">
+            <div class="mb-3">
+                <label class="form-label fw-semibold">Username</label>
+                <input type="text" name="username" class="form-control form-control-lg" required />
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label fw-semibold">Password</label>
+                <input type="password" name="password" class="form-control form-control-lg" required />
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-lg w-100 fw-bold">Login</button>
+        </form>
+
+        <div class="text-center mt-3">
+            <span>Don’t have an account?</span>
+            <a asp-controller="Account" asp-action="Register" class="fw-bold text-decoration-none">Register here</a>
+        </div>
+    </div>
+</div>

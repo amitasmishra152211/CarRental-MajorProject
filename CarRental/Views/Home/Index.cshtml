@@ -1,0 +1,132 @@
+﻿@using CarRental_Model.Domain
+@using CarRental_DataAccess.Repository.RepoSer
+@{
+    IEnumerable<Brand> brands = ViewBag.Brands as IEnumerable<Brand>;
+    IEnumerable<VehicleType> vehicleTypes = ViewBag.VehicleTypes as IEnumerable<VehicleType>;
+}
+
+<!-- Hero Section -->
+<section class="hero-section position-relative text-white w-100" style="height: 500px; background-image: url('https://themes-themegoods.b-cdn.net/grandcarrental/demo/wp-content/uploads/2017/01/IMG_3496bfree.jpg'); background-size: cover; background-position: center;">
+    <div class="overlay_background position-absolute w-100 h-100" style="background: rgba(0,0,0,0.2); top:0; left:0;"></div>
+    <div class="d-flex flex-column justify-content-center align-items-center position-relative text-center h-100">
+        <h1 class="display-4 fw-bold">Rent Your Dream Car Today</h1>
+        <p class="lead mt-3">We provide a wide range of vehicles for all your travel needs</p>
+        <a asp-controller="Home" asp-action="SearchResults" class="btn btn-warning btn-lg text-dark mt-3">Book Now</a>
+    </div>
+</section>
+
+<div class="container mt-5 mb-5">
+
+    <!-- Vehicle Type Section -->
+    <div class="text-center mb-4">
+        <h2><b>Find Car by Type</b></h2>
+        <p>We offer professional car rental & limousine services in our range of high-end vehicles</p>
+    </div>
+
+    <div class="swiper vehicle-swiper">
+        <div class="swiper-wrapper">
+            @foreach (VehicleType vehicle in vehicleTypes)
+            {
+                <div class="swiper-slide">
+                    <a asp-controller="CarType" asp-action="Details" asp-route-id="@vehicle.Id" class="card shadow-sm text-decoration-none image-card">
+                        <img src="@vehicle.VehicleTypeImg" class="card-img-top" alt="@vehicle.TypeName" />
+                        <div class="card-body text-center static-text">
+                            <h5 class="fw-bold mb-0 text-dark">@vehicle.TypeName</h5>
+                        </div>
+                    </a>
+                </div>
+            }
+        </div>
+        <div class="swiper-button-next"></div>
+        <div class="swiper-button-prev"></div>
+    </div>
+</div>
+
+<!-- Why Choose Us -->
+<section class="py-5 bg-dark text-light">
+    <div class="container text-center">
+        <h2 class="fw-bold mb-5">Why Choose Us</h2>
+        <div class="row">
+            <div class="col-md-4 mb-4">
+                <i class="fas fa-car fa-3x text-warning mb-3"></i>
+                <h5 class="fw-bold">Wide Selection</h5>
+                <p>From hatchbacks to SUVs and luxury cars, we’ve got it all.</p>
+            </div>
+            <div class="col-md-4 mb-4">
+                <i class="fas fa-dollar-sign fa-3x text-warning mb-3"></i>
+                <h5 class="fw-bold">Affordable Pricing</h5>
+                <p>No hidden costs, only clear and competitive rates.</p>
+            </div>
+            <div class="col-md-4 mb-4">
+                <i class="fas fa-headset fa-3x text-warning mb-3"></i>
+                <h5 class="fw-bold">24/7 Support</h5>
+                <p>Always available to assist you anytime, anywhere.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<div class="container mt-5 mb-5">
+
+    <!-- Brand Section -->
+    <div class="text-center mb-4">
+        <h2><b>First Class Car Rental & Limousine Services</b></h2>
+        <p>We offer professional car rental & limousine services in our range of high-end vehicles</p>
+    </div>
+
+    <div class="swiper brand-swiper">
+        <div class="swiper-wrapper">
+            @foreach (Brand brand in brands)
+            {
+                <div class="swiper-slide">
+                    <a asp-controller="CarBrand" asp-action="Details" asp-route-id="@brand.Id" class="card shadow-sm text-decoration-none image-card">
+                        <img src="@brand.BrandImage" class="card-img-top" alt="@brand.BrandName" />
+                        <div class="card-body text-center static-text">
+                            <h5 class="fw-bold mb-0 text-dark">@brand.BrandName</h5>
+                        </div>
+                    </a>
+                </div>
+            }
+        </div>
+        <div class="swiper-button-next"></div>
+        <div class="swiper-button-prev"></div>
+    </div>
+
+</div>
+
+@section Scripts {
+    <!-- Swiper JS -->
+    <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
+    <script>
+        var vehicleSwiper = new Swiper('.vehicle-swiper', {
+            slidesPerView: 3,
+            spaceBetween: 20,
+            loop: true,
+            navigation: {
+                nextEl: '.vehicle-swiper .swiper-button-next',
+                prevEl: '.vehicle-swiper .swiper-button-prev',
+            },
+            breakpoints: {
+                0: { slidesPerView: 1 },
+                576: { slidesPerView: 2 },
+                992: { slidesPerView: 3 }
+            }
+        });
+
+        var brandSwiper = new Swiper('.brand-swiper', {
+            slidesPerView: 3,
+            spaceBetween: 20,
+            loop: true,
+            navigation: {
+                nextEl: '.brand-swiper .swiper-button-next',
+                prevEl: '.brand-swiper .swiper-button-prev',
+            },
+            breakpoints: {
+                0: { slidesPerView: 1 },
+                576: { slidesPerView: 2 },
+                992: { slidesPerView: 3 }
+            }
+        });
+    </script>
+}

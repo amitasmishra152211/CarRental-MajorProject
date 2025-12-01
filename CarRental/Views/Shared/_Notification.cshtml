@@ -1,0 +1,28 @@
+﻿<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/js/toastr .js"></script>
+<link href="~/css/toastr .css" rel="stylesheet" />
+
+@if (TempData["success"] != null)
+{
+    <script>
+        toastr.success('@TempData["success"]');
+    </script>
+}
+@if (TempData["error"] != null)
+{
+    <script>
+        toastr.error('@TempData["error"]');
+    </script>
+}
+@if (TempData["info"] != null)
+{
+    <script>
+        toastr.info('@TempData["info"]');
+    </script>
+}
+@if (TempData["warning"] != null)
+{
+    <script>
+        toastr.warning('@TempData["warning"]');
+    </script>
+}

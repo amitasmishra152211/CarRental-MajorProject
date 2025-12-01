@@ -1,0 +1,87 @@
+﻿@using CarRental_Model.Domain
+@model IEnumerable<CarRental_Model.Domain.Vehicle>
+@{
+    ViewData["Title"] = ViewBag.BrandName + " Cars";
+    var brandImage = ViewBag.BrandImage; // Pass this from controller
+    var brandName = ViewBag.BrandName;
+    var brandDescription = ViewBag.Description;
+}
+
+<!-- Brand Hero Section -->
+<section class="brand-hero position-relative text-white w-100"
+         style="height:500px; background-image: url('@brandImage'); background-size: cover; background-position: center;">
+    <div class="overlay_background position-absolute w-100 h-100" style="background: rgba(0,0,0,0.3); top:0; left:0;"></div>
+    <div class="d-flex flex-column justify-content-end position-relative h-100"
+         style="align-items: flex-start; text-align: left; padding-right: 50px;">
+        <h1 class="display-4 fw-bold m-3" >@brandName</h1>
+        <p class="lead m-3">@brandDescription</p>
+    </div>
+</section>
+<section class="py-5 bg-dark text-white text-center">
+    <div class="container">
+        <h2 class="fw-bold mb-5">Best Car Rental Services</h2>
+        <div class="row">
+            <div class="col-md-4 mb-4">
+                <i class="fas fa-car fa-3x text-warning mb-3"></i>
+                <h5 class="fw-bold">Wide Range of Vehicles</h5>
+                <p>Choose from economy, SUV, or luxury cars – all maintained to perfection.</p>
+            </div>
+            <div class="col-md-4 mb-4">
+                <i class="fas fa-plane-arrival fa-3x text-warning mb-3"></i>
+                <h5 class="fw-bold">Airport Transfers</h5>
+                <p>Reliable airport pickup and drop service with professional drivers.</p>
+            </div>
+            <div class="col-md-4 mb-4">
+                <i class="fas fa-user-tie fa-3x text-warning mb-3"></i>
+                <h5 class="fw-bold">Luxury Chauffeur</h5>
+                <p>Travel in style with our premium chauffeur-driven car rentals.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Vehicles List -->
+<div class="container mt-5 mb-3">
+    <div class="row g-4">
+        @foreach (var vehicle in Model)
+        {
+            <div class="col-md-4">
+                <div class="card h-100 shadow-sm vehicle-card">
+                    <img src="@vehicle.ImageUrl"
+                         class="card-img-top"
+                         alt="@vehicle.VehicleName"
+                         style="height:250px; object-fit:cover;" />
+                    <div class="card-body text-center">
+                        <h5 class="fw-bold">@vehicle.VehicleName</h5>
+
+                        <div class="d-flex justify-content-around mt-3 mb-3">
+                            <div class="vehicle-icon text-dark">
+                                <i class="fas fa-user fa-lg"></i>
+                                <p class="mb-0">@vehicle.Passenger</p>
+                            </div>
+                            <div class="vehicle-icon text-dark">
+                                <i class="fas fa-suitcase fa-lg"></i>
+                                <p class="mb-0">@vehicle.Luggage</p>
+                            </div>
+                            <div class="vehicle-icon text-dark">
+                                <i class="fas fa-cogs fa-lg"></i>
+                                <p class="mb-0">@vehicle.EngineType</p>
+                            </div>
+                            <div class="vehicle-icon text-dark">
+                                <i class="fas fa-car-side fa-lg"></i>
+                                <p class="mb-0">@vehicle.Doors</p>
+                            </div>
+                        </div>
+
+                        <p>
+                            <span>₹@vehicle.RentPerDay / Day</span>
+                        </p>
+                        <a asp-controller="Booking" asp-action="Checkout" asp-route-vehicleId="@vehicle.Id" class="btn btn-warning w-100 mt-2">
+                            Book Now
+                        </a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>

@@ -1,0 +1,50 @@
+﻿@model IEnumerable<CarRental_Model.Domain.Vehicle>
+
+<div class="container mt-5">
+    <div class="text-center mb-5">
+        <h2>Search Results</h2>
+        <p>Found @Model.Count() cars matching your query</p>
+    </div>
+
+    <div class="row">
+        @foreach (var vehicle in Model)
+        {
+            <div class="col-md-4 mb-4">
+                <div class="card shadow-sm text-decoration-none">
+                    <!-- Dynamic Redirect -->
+                    @{
+                        string url = "#";
+
+                        // अगर search query CarType है
+                        if (vehicle.VehicleType.TypeName.ToLower().Contains(ViewBag.Query.ToLower()))
+                        {
+                            url = Url.Action("Details", "CarType", new { id = vehicle.VehicleTypeId });
+                        }
+                        // अगर search query Brand है
+                        else if (vehicle.Brand.BrandName.ToLower().Contains(ViewBag.Query.ToLower()))
+                        {
+                            url = Url.Action("Details", "CarBrand", new { id = vehicle.BrandId });
+                        }
+                        // वरना Vehicle detail पर भेज दो
+                        else
+                        {
+                            url = Url.Action("Details", "Vehicle", new { id = vehicle.Id });
+                        }
+                    }
+
+                    <a href="@url" class="text-decoration-none text-dark">
+                        <img src="@vehicle.ImageUrl" class="card-img-top"
+                             alt="@vehicle.VehicleName"
+                             style="height:250px; object-fit:cover;" />
+                        <div class="card-body text-center">
+                            <h5 class="fw-bold">@vehicle.VehicleName</h5>
+                            <p>@vehicle.Brand.BrandName | @vehicle.VehicleType.TypeName</p>
+                            <p>Rent per Day: ₹@vehicle.RentPerDay</p>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        }
+    </div>
+
+</div>

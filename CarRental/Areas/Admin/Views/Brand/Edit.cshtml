@@ -1,0 +1,36 @@
+﻿@model CarRental_Model.Domain.Brand
+@{
+    ViewData["Title"] = "Edit Brand";
+}
+
+<h2>Edit Brand</h2>
+
+<form asp-area="Admin" asp-controller="Brand" asp-action="Edit" method="post">
+    @Html.AntiForgeryToken()
+    <input type="hidden" asp-for="Id" />
+
+    <div class="mb-3">
+        <label asp-for="BrandName" class="form-label"></label>
+        <input asp-for="BrandName" class="form-control" />
+        <span asp-validation-for="BrandName" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="BrandImage" class="form-label">Brand Image URL</label>
+        <input asp-for="BrandImage" class="form-control" placeholder="https://example.com/brand.jpg" />
+        <span asp-validation-for="BrandImage" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Description" class="form-label"></label>
+        <textarea asp-for="Description" class="form-control"></textarea>
+        <span asp-validation-for="Description" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Update</button>
+    <a asp-area="Admin" asp-controller="Brand" asp-action="Index" class="btn btn-secondary">Back</a>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

@@ -1,0 +1,34 @@
+﻿@model CarRental_Model.Domain.User
+@{
+    ViewData["Title"] = "Delete User";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-4">
+    <h2>Delete User</h2>
+    <div class="alert alert-danger">
+        Are you sure you want to delete this user?
+    </div>
+
+    <dl class="row">
+        <dt class="col-sm-3">Username</dt>
+        <dd class="col-sm-9">@Model.Username</dd>
+
+        <dt class="col-sm-3">Email</dt>
+        <dd class="col-sm-9">@Model.Email</dd>
+
+        <dt class="col-sm-3">Full Name</dt>
+        <dd class="col-sm-9">@($"{Model.FirstName} {Model.MiddleName} {Model.LastName}")</dd>
+
+        <dt class="col-sm-3">Role</dt>
+        <dd class="col-sm-9">@Model.Role?.RoleName</dd>
+    </dl>
+
+    <form asp-action="DeleteConfirmed" asp-controller="User" asp-area="Admin" method="post">
+        @Html.AntiForgeryToken()
+        <input type="hidden" asp-for="Id" />
+        <button type="submit" class="btn btn-danger">Yes, Delete</button>
+        <a asp-action="Index" asp-controller="User" asp-area="Admin" class="btn btn-secondary">Cancel</a>
+    </form>
+
+</div>

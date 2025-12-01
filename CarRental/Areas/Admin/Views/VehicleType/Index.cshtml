@@ -1,0 +1,35 @@
+﻿@model IEnumerable<CarRental_Model.Domain.VehicleType>
+@{
+    ViewData["Title"] = "Vehicle Types";
+}
+
+<h2>Vehicle Types</h2>
+<a asp-area="Admin" asp-controller="VehicleType" asp-action="Create" class="btn btn-success mb-3">+ Add Vehicle Type</a>
+
+<table id="vehicleTypeTable" class="table table-bordered table-striped datatable">
+    <thead class="table-dark">
+        <tr>
+            <th>Name</th>
+            <th>Image</th>
+            <th style="width:250px;">Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var type in Model)
+        {
+            <tr>
+                <td>@type.TypeName</td>
+                <td>
+                    @if (!string.IsNullOrEmpty(type.VehicleTypeImg))
+                    {
+                        <img src="@type.VehicleTypeImg" alt="@type.TypeName" style="height:50px;" />
+                    }
+                </td>
+                <td>
+                    <a asp-area="Admin" asp-controller="VehicleType" asp-action="Edit" asp-route-id="@type.Id" class="btn btn-primary btn-sm">Edit</a>
+                    <a asp-area="Admin" asp-controller="VehicleType" asp-action="Delete" asp-route-id="@type.Id" class="btn btn-danger btn-sm">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

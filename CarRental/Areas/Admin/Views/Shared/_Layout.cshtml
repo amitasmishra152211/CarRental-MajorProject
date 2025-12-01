@@ -1,0 +1,122 @@
+﻿@inject CarRental_DataAccess.Repository.IRepoSer.IUnitOfWork UnitOfWork
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Admin Dashboard</title>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/css/site.css" rel="stylesheet" />
+
+    <!-- FontAwesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
+
+    <!-- DataTables CSS -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css" />
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.1/css/buttons.bootstrap5.min.css" />
+</head>
+<body>
+    <div class="d-flex">
+        <!-- Sidebar -->
+        <div class="bg-dark text-light p-3 sidebar">
+            <h4>Admin Panel</h4>
+            <ul class="nav flex-column mt-3">
+                <li class="nav-item mb-2">
+                    <a class="nav-link text-light" href="@Url.Action("Index", "Home", new { area = "Admin" })"><i class="fas fa-tachometer-alt me-2"></i> Dashboard</a>
+                </li>
+
+                <li class="nav-item mt-3">
+                    <a class="nav-link text-light" href="@Url.Action("Index", "Brand", new { area = "Admin" })"><i class="fas fa-industry me-2"></i> Manage Brands</a>
+                    <a class="btn btn-success btn-sm w-100 mt-1" href="@Url.Action("Create", "Brand", new { area = "Admin" })"><i class="fas fa-plus me-1"></i> Add Brand</a>
+                </li>
+
+                <li class="nav-item mt-3">
+                    <a class="nav-link text-light" href="@Url.Action("Index", "VehicleType", new { area = "Admin" })"><i class="fas fa-layer-group me-2"></i> Manage Vehicle Types</a>
+                    <a class="btn btn-success btn-sm w-100 mt-1" href="@Url.Action("Create", "VehicleType", new { area = "Admin" })"><i class="fas fa-plus me-1"></i> Add Vehicle Type</a>
+                </li>
+
+                <li class="nav-item mt-3">
+                    <span class="text-light">Select Brand</span>
+                    <form method="get" action="@Url.Action("Index", "Vehicle", new { area = "Admin" })">
+                        <select name="brandId" class="form-select form-select-sm mt-1" onchange="this.form.submit()">
+                            <option value="">-- Select Brand --</option>
+                            @foreach (var brand in UnitOfWork.Brands.GetAll())
+                            {
+                                <option value="@brand.Id"
+                                        selected="@(HttpContextAccessor.HttpContext.Request.Query["brandId"] == brand.Id.ToString())">
+                                    @brand.BrandName
+                                </option>
+                            }
+                        </select>
+                    </form>
+
+                    @if (HttpContextAccessor.HttpContext.Request.Query["brandId"].Any())
+                    {
+                        var selectedBrandId = HttpContextAccessor.HttpContext.Request.Query["brandId"].ToString();
+                        <a class="btn btn-success btn-sm w-100 mt-2"
+                           href="@Url.Action("Create", "Vehicle", new { area = "Admin", brandId = selectedBrandId })">
+                            <i class="fas fa-plus me-1"></i> Add Vehicle
+                        </a>
+                    }
+                </li>
+
+                <li class="nav-item mt-3">
+                    <a class="nav-link text-light" href="@Url.Action("Index", "User", new { area = "Admin" })">
+                        <i class="fas fa-users me-2"></i> Manage Users
+                    </a>
+                </li>
+
+                <!-- Manage Bookings -->
+                <li class="nav-item mt-3">
+                    <a class="nav-link text-light" href="@Url.Action("Index", "Booking", new { area = "Admin" })">
+                        <i class="fas fa-calendar-check"></i> Manage Bookings
+                    </a>
+                </li>
+
+                <li class="nav-item mt-3">
+                    <a class="nav-link text-light" href="@Url.Action("Index", "ContactMessage", new { area = "Admin" })">
+                        <i class="fas fa-envelope-open-text me-2"></i> User Messages
+                    </a>
+                </li>
+
+
+                <li class="nav-item mt-4">
+                    <a class="btn btn-outline-light w-100" href="@Url.Action("Logout", "Account", new { area = "Admin" })"><i class="fas fa-sign-out-alt me-2"></i> Logout</a>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content-admin flex-grow-1 p-3">
+            <partial name="_Notification">
+            @RenderBody()
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+
+    <script src="https://cdn.datatables.net/buttons/2.4.1/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.bootstrap5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.print.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
+
+    <!-- Custom JS -->
+    <script src="~/js/admin-datatables.js"></script>
+    
+
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

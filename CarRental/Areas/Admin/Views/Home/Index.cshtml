@@ -1,0 +1,185 @@
+﻿@inject CarRental_DataAccess.Repository.IRepoSer.IUnitOfWork UnitOfWork
+@{
+    ViewData["Title"] = "Admin Dashboard";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+
+    var brands = UnitOfWork.Brands.GetAll();
+    var vehicleTypes = UnitOfWork.VehicleType.GetAll();
+    var vehicles = UnitOfWork.Vehicles.GetAll();
+    var messages = UnitOfWork.ContactMessage.GetAll();
+}
+
+<div class="container-fluid">
+    <h2 class="mb-4"><i class="fas fa-tachometer-alt"></i> Admin Dashboard</h2>
+    <div class="alert alert-primary">Welcome to the Admin Panel</div>
+
+    <!-- Summary Cards -->
+    <div class="row mb-4">
+        <div class="col-md-4">
+            <div class="card text-white bg-primary shadow-sm">
+                <div class="card-body text-center">
+                    <h3>@vehicles.Count()</h3>
+                    <a asp-area="Admin" asp-controller="Vehicle" asp-action="Index" class="text-decoration-none fw-bold" style="color: beige;">Total Vehicles</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card text-white bg-success shadow-sm">
+                <div class="card-body text-center">
+                    <h3>@brands.Count()</h3>
+                    <a asp-area="Admin" asp-controller="Brand" asp-action="Index" class="text-decoration-none fw-bold" style="color: beige;">Total Brands</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card text-white bg-warning shadow-sm">
+                <div class="card-body text-center">
+                    <h3>@vehicleTypes.Count()</h3>
+                    <a asp-area="Admin" asp-controller="VehicleType" asp-action="Index" class="text-decoration-none fw-bold" style="color: beige;">Total Vehicle Types</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Brand Wise Vehicle Count -->
+    <div class="card shadow-sm mb-4">
+        <div class="card-header bg-dark text-white">
+            <h5 class="mb-0">Brand Wise Vehicle Count</h5>
+        </div>
+        <div class="card-body p-0">
+            <table class="table table-bordered mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th>Brand</th>
+                        <th class="text-center" style="width:150px;">Vehicles</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var brand in brands)
+                    {
+                        var vehicleCount = vehicles.Count(v => v.BrandId == brand.Id);
+                        <tr>
+                            <td>
+                                <a href="@Url.Action("Index", "Vehicle", new { area = "Admin", brandId = brand.Id })"
+                                   class="text-decoration-none fw-bold">
+                                    @brand.BrandName
+                                </a>
+                            </td>
+                            <td class="text-center">
+                                <span class="badge bg-primary">@vehicleCount</span>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Quick Navigation -->
+    <div class="row align-items-stretch">
+        <!-- Brands -->
+        <div class="col-md-4 mb-3">
+            <div class="card shadow-lg border-0 rounded-3 h-100">
+                <div class="card-body text-center">
+                    <i class="fas fa-industry fa-3x text-primary mb-3"></i>
+                    <h5 class="card-title">Brands</h5>
+                    <a class="btn btn-success w-100" href="@Url.Action("Index", "Brand", new { area = "Admin" })">
+                        <i class="fas fa-cogs"></i> Manage Brands
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Vehicle Types -->
+        <div class="col-md-4 mb-3">
+            <div class="card shadow-lg border-0 rounded-3 h-100">
+                <div class="card-body text-center">
+                    <i class="fas fa-layer-group fa-3x text-warning mb-3"></i>
+                    <h5 class="card-title">Vehicle Types</h5>
+                    <a class="btn btn-success w-100" href="@Url.Action("Index", "VehicleType", new { area = "Admin" })">
+                        <i class="fas fa-cogs"></i> Manage Vehicle Types
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Vehicles -->
+        <div class="col-md-4 mb-3">
+            <div class="card shadow-lg border-0 rounded-3 h-100">
+                <div class="card-body text-center">
+                    <i class="fas fa-car fa-3x text-danger mb-3"></i>
+                    <h5 class="card-title">Vehicles</h5>
+
+                    <select class="form-select mb-2" id="brandSelect">
+                        <option value="">Select Brand</option>
+                        @foreach (var brand in brands)
+                        {
+                            <option value="@brand.Id">@brand.BrandName</option>
+                        }
+                    </select>
+
+                    <a id="manageVehicleBtn" class="btn btn-warning w-100" href="#">
+                        <i class="fas fa-car-side"></i> Manage Vehicles
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- users -->
+
+        <div class="col-md-4 mb-3">
+            <div class="card shadow-lg border-0 rounded-3 h-100">
+                <div class="card-body text-center">
+                    <i class="fas fa-users fa-3x text-info mb-3"></i>
+                    <h5 class="card-title">Users</h5>
+                    <a class="btn btn-success w-100" href="@Url.Action("Index", "User", new { area = "Admin" })">
+                        <i class="fas fa-user-cog"></i> Manage Users
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-3">
+            <div class="card shadow-lg border-0 rounded-3 h-100">
+                <div class="card-body text-center">
+                    <i class="fas fa-calendar-check fa-3x text-success mb-3"></i>
+                    <h5 class="card-title">Bookings</h5>
+                    <a class="btn btn-success w-100" href="@Url.Action("Index", "Booking", new { area = "Admin" })">
+                        <i class="fas fa-calendar-alt"></i> Manage Bookings
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Contact Messages -->
+        <div class="col-md-4 mb-3">
+            <div class="card shadow-lg border-0 rounded-3 h-100">
+                <div class="card-body text-center">
+                    <i class="fas fa-envelope fa-3x text-dark mb-3"></i>
+                    <h5 class="card-title">User Messages</h5>
+                    <a class="btn btn-success w-100" href="@Url.Action("Index", "ContactMessage", new { area = "Admin" })">
+                        <i class="fas fa-envelope-open-text"></i> View Messages
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        const brandSelect = document.getElementById("brandSelect");
+        const manageBtn = document.getElementById("manageVehicleBtn");
+
+        brandSelect.addEventListener("change", function () {
+            const brandId = this.value;
+            if (brandId) {
+                manageBtn.href = `/Admin/Vehicle/Index?brandId=${brandId}`;
+            } else {
+                manageBtn.href = "#";
+            }
+        });
+    </script>
+}
